@@ -44,6 +44,13 @@ function Hero() {
     >
       Download CV
     </a>
+
+    <a
+      href="https://linktr.ee/valenciadavid"
+      className="inline-flex items-center rounded-full border-2 border-indigo-900 text-indigo-900 px-8 py-3 text-base font-medium hover:bg-indigo-50 transition"
+    >
+      Let's Connect
+    </a>
   </div>
 
   {/* Scroll Indicator */}

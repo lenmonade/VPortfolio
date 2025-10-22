@@ -136,20 +136,23 @@ function Projects() {
     
     // --- FIX: Initial Scroll to Project 1 (Index 0) ---
     // This runs once after mount to ensure Project 1 is centered and highlighted.
-    const initialScroll = () => {
-        const cardElement = container.querySelector('#project-0');
-        if (cardElement) {
-             cardElement.scrollIntoView({ 
-                behavior: 'smooth', 
-                inline: 'center', 
-                block: 'nearest' 
-            });
-            setActiveIndex(0);
-        }
+  const initialScroll = () => {
+    const cardElement = container.querySelector('#project-0');
+    if (cardElement) {
+      // Calculate card center relative to container's scrollLeft
+      const containerRect = container.getBoundingClientRect();
+      const cardRect = cardElement.getBoundingClientRect();
+      const cardCenter = cardRect.left - containerRect.left + (cardRect.width / 2);
+      const scrollTo = cardCenter - (container.offsetWidth / 2);
+      container.scrollTo({ left: scrollTo, behavior: 'smooth' });
+      setActiveIndex(0);
     }
+  }
     
-    // Run initial scroll slightly delayed to ensure DOM is ready and calculations are correct
-    setTimeout(initialScroll, 100);
+  // Run initial scroll slightly delayed to ensure DOM is ready and calculations are correct
+  // Use container.scrollTo instead of element.scrollIntoView to avoid triggering
+  // a vertical page scroll that makes Projects the landing view.
+  setTimeout(initialScroll, 100);
 
     return () => {
       container.removeEventListener('scroll', handleDebouncedScroll);

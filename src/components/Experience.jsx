@@ -28,7 +28,7 @@ const experiences = [
     date: "May 2025 — Present",
     description: "Led the overall planning and execution of HISHOT 2025, HIMTI's annual Seminar, Workshop, and Study Tour program, ensuring an impactful learning experience for students by leading and coordinating the efforts of 9 divisions.",
     tags: ["Leadership", "Event Planning", 'Team Management'],
-    image: 'public/HISHOT.JPG',
+    image: '/HISHOT.JPG',
   },
   {
     // icon: OrganizationIcon,
@@ -36,7 +36,7 @@ const experiences = [
     date: "January 2025 — February 2025",
     description: "Contributed to the planning and execution of HILET (HIMTI Learning and Training) by creating structured PowerPoint presentations and providing assistance to speakers as a Liaison Officer (LO).",
     tags: ["Event Management", "Time Management", "Attention to Detail"],
-    image: 'public/HILET.jpg',
+    image: 'HILET.jpg',
   },
   {
     // icon: CompetitionIcon, 
@@ -44,7 +44,7 @@ const experiences = [
     date: "September 2024",
     description: "Competed as part of team SnapUI in IFEST UNPAD’s Web Development competition, presenting Renfit, a website for clothing rental services, and made it to the top 10 finalist — marking significant progress from our first competition together.",
     tags: ["Creativity", "Innovation", "Teamwork"],
-    image: 'public/IFEST.jpeg',
+    image: '/IFEST.jpeg',
   },
   {
     // icon: OrganizationIcon, 
@@ -52,7 +52,7 @@ const experiences = [
     date: "April 2024 - July 2024",
     description: "As the Coordinator of the Art & Design Division, I was responsible for leading and managing the division and contributing with team members to the design of publication media, PowerPoints, certificates, and other materials.",
     tags: ["Leadership", "Creativity", "Team Management"],
-    image: 'public/BTV.jpg',
+    image: '/BTV.jpg',
   }
 ];
 
