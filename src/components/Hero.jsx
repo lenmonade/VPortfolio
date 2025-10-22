@@ -4,6 +4,8 @@ import useTypingEffect from "../hook/useTypingEffect";
 // Example taglines — you can edit/expand these
 const TAGLINES = [
   "  AI Enthusiast",
+  " Machine Learning Explorer",
+  " Frontend Developer",
   " UI/UX Designer",
   " Software Developer",
   " Data Enthusiast"
@@ -37,16 +39,7 @@ function Hero() {
   {/* CTA Buttons */}
   <div className="flex items-center gap-4">
     <a
-      href="https://linktr.ee/valenciadavid"
-      target="_blank"
-      rel="noreferrer"
-      className="inline-flex items-center rounded-full bg-indigo-900 text-white px-8 py-3 text-base font-medium hover:opacity-90 transition"
-    >
-      Let&apos;s connect!
-    </a>
-
-    <a
-      href="/cv.pdf"
+      href="/CV_JVD.pdf"
       className="inline-flex items-center rounded-full border-2 border-indigo-900 text-indigo-900 px-8 py-3 text-base font-medium hover:bg-indigo-50 transition"
     >
       Download CV

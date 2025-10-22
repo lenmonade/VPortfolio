@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 const navItems = [
   { href: "#profile", label: "Profile" },
   { href: "#experience", label: "Experience" },
+  { href: "#skills", label: "Skills" },
   { href: "#projects", label: "Projects" },
   { href: "#contact", label: "Contact" },
 ];
@@ -20,7 +21,7 @@ function Navbar() {
     {/* Logo */}
     <div className="flex items-center gap-2">
       <img 
-        src="src/assets/logo.svg" 
+        src="/logo.svg" 
         alt="Logo" 
         className="w-8 h-8 object-contain" 
       />
@@ -45,25 +46,3 @@ function Navbar() {
 }
 
 export default Navbar;
-
-// function Navbar() {
-//   return (
-//     <header className="sticky top-0 z-30 bg-background/80 backdrop-blur border-b border-border">
-//       <div className="mx-auto max-w-6xl px-4 py-3 flex items-center justify-between">
-//         <div className="flex items-center gap-2">
-//           <img src="src/assets/logo.svg" width={24} height={24} alt="Logo" className="shrink-0" />
-//           {/* <span className="sr-only">Home</span> */}
-//         </div>
-//         <nav className="hidden md:flex items-center gap-6 text-sm">
-//           {navItems.map((it) => (
-//             <a key={it.href} href={it.href} className="hover:underline underline-offset-4">
-//               {it.label}
-//             </a>
-//           ))}
-//         </nav>
-//       </div>
-//     </header>
-//   );
-// }
-
-// export default Navbar;
