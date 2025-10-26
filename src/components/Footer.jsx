@@ -8,7 +8,7 @@ export default function Footer() {
         <p className="text-sm">© 2025 Valencia David. All rights reserved.</p>
         <div className="flex items-center gap-3">
           <a
-            href="https://www.linkedin.com"
+            href="https://www.linkedin.com/in/josephine-valencia-david/"
             target="_blank"
             rel="noopener noreferrer"
             className="underline underline-offset-4 text-sm"
@@ -16,7 +16,7 @@ export default function Footer() {
             LinkedIn
           </a>
           <a
-            href="mailto:email@example.com"
+            href="mailto:josephinevalenciad@gmail.com"
             className="underline underline-offset-4 text-sm"
           >
             Email
