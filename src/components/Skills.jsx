@@ -95,30 +95,28 @@ const IconRenderer = ({ item }) => {
     const iconSrc = item.icons[0];
     
     // Determine image size based on item title
-    let imgSize = "w-20 h-20";
+    // ADJUSTED: Menggunakan w-16/h-16 (mobile) dan w-24/h-24 (mobile large) untuk menghemat ruang vertikal.
+    let imgSize = "w-16 h-16 sm:w-20 sm:h-20"; 
     if (item.title === "HTML, CSS, JS" || item.title === "Microsoft Office") {
-      // Apply a larger, custom size for HTML, CSS, JS
-      imgSize = "w-28 h-28";
+      imgSize = "w-24 h-24 sm:w-28 sm:h-28";
     }
 
-    // Check if the icon is an image path (contains a slash)
     if (iconSrc && iconSrc.includes('/')) {
         return (
-            // Set container height to accommodate the largest possible icon (h-28)
-            <div className="flex justify-center items-center mb-4 h-28 w-full"> 
+            // ADJUSTED: Mengurangi tinggi container dari h-28 menjadi h-24 untuk mobile
+            <div className="flex justify-center items-center mb-2 h-24 w-full sm:h-28"> 
                 <img 
                     src={iconSrc} 
                     alt={`${item.title} icon`}
-                    // ADDED: group-hover effects here for scaling and lifting the icon
                     className={`${imgSize} object-contain drop-shadow-lg transition duration-300 group-hover:scale-110 group-hover:-translate-y-2`} 
                 />
             </div>
         );
     }
 
-    // Fallback for simple emojis (if paths are wrong or if you intentionally use emojis)
+    // Fallback for simple emojis
     return (
-        <div className="text-6xl mb-4 p-2">
+        <div className="text-5xl mb-2 p-2 sm:text-6xl">
             <span className="drop-shadow-lg">{iconSrc}</span>
         </div>
     );
@@ -139,16 +137,19 @@ function Skills() {
 
   // 2. Measure and set sidebar height after render/tab change
   React.useEffect(() => {
-    if (contentRef.current) {
-      // Set the height of the sidebar wrapper equal to the content wrapper height
+    const isDesktop = window.matchMedia("(min-width: 768px)").matches; 
+
+    if (contentRef.current && isDesktop) {
       setSidebarHeight(contentRef.current.offsetHeight);
+    } else if (!isDesktop) {
+      setSidebarHeight('auto');
     }
-  }, [key]); // Re-measure every time the content key changes (i.e., every tab change)
+  }, [key]); 
 
 
   return (
     // Outer container for the light background color
-    <div className=" min-h-screen font-sans">
+    <div className="min-h-screen font-sans">
         
       {/* CSS for custom animation */}
       <style>{`
@@ -163,21 +164,23 @@ function Skills() {
         }
       `}</style>
 
-      <section id="skills" className="mx-auto max-w-6xl px-1 py-16 md:py-24">
+      {/* ADJUSTED: Padding vertikal pada section dikurangi untuk mobile (py-12) */}
+      <section id="skills" className="mx-auto max-w-6xl px-4 py-12 md:py-24">
         
         {/* SECTION HEADER */}
-        <h2 className="font-serif text-5xl md:text-6xl mb-12 text-indigo-900 italic font-medium tracking-tight text-left">
+        {/* ADJUSTED: Ukuran font header dikurangi ke text-4xl dan mb-8 untuk mobile */}
+        <h2 className="font-serif text-4xl md:text-6xl mb-8 md:mb-12 text-indigo-900 italic font-medium tracking-tight text-left">
           Skills
         </h2>
         
-        {/* FLEX LAYOUT - Side by side. Removed gap-6 here. */}
+        {/* FLEX LAYOUT */}
         <div className="flex flex-col md:flex-row">
           
-          {/* LEFT COLUMN: Sidebar Tabs (Height set dynamically) */}
-          <div className="md:w-1/3 p-0 md:pr-6 mb-6 md:mb-0">
-             {/* Dynamic height applied here */}
+          {/* LEFT COLUMN: Sidebar Tabs */}
+          <div className="w-full md:w-1/3 p-0 md:pr-6 mb-6 md:mb-0">
              <div 
-               className="h-full w-full rounded-[30px]  flex flex-col justify-around p-2" 
+               className="h-full w-full rounded-[30px] flex flex-col space-y-3 md:space-y-0 md:justify-around p-1 md:p-2" 
+               // Mengurangi space-y-4 menjadi space-y-3
                style={{ height: sidebarHeight !== 'auto' && sidebarHeight > 0 ? `${sidebarHeight}px` : 'auto' }}
              >
                 {expTabs.map((t) => {
@@ -188,12 +191,10 @@ function Skills() {
                       onClick={() => setActiveTab(t)}
                       className={`
                         w-full transition text-center font-semibold
-                        py-6 px-8 text-lg rounded-[22px]
+                        py-3 md:py-6 px-4 text-sm md:text-lg rounded-[22px]
                         ${
                           active
-                            // Active tab is solid navy with white text
                             ? "bg-[#17266A] text-white shadow-lg"
-                            // Inactive tab is white with navy border and text
                             : "bg-white text-[#17266A] border-2 border-[#081956] hover:bg-gray-50"
                         }
                       `}
@@ -205,26 +206,27 @@ function Skills() {
              </div>
           </div>
 
-          {/* RIGHT COLUMN: Content Container (Reference used for measurement) */}
+          {/* RIGHT COLUMN: Content Container */}
           <div 
-            ref={contentRef} // Reference attached here
-            className="md:w-2/3 min-h-[300px] bg-[#1A2B53] rounded-[30px] p-8 shadow-2xl"
+            ref={contentRef}
+            // ADJUSTED: Padding container content dikurangi dari p-4 menjadi p-3 untuk mobile
+            className="w-full md:w-2/3 min-h-[300px] bg-[#1A2B53] rounded-[30px] p-3 sm:p-6 md:p-8 shadow-2xl"
           >
             
             {/* HORIZONTAL SCROLLING WRAPPER */}
             <div className="overflow-x-auto">
               
               {/* FLEX CONTAINER for Cards */}
-              <div className="flex gap-6 min-w-max pb-2">
+              <div className="flex gap-3 sm:gap-6 min-w-max pb-2">
                 
                 {expData[activeTab].map((item, i) => (
                   <div
                     key={i}
-                    // EDITED: Re-added 'group' class. Removed hover:-translate-y-1 and hover:scale-[1.03]
-                    className="group w-[240px] h-[260px] flex-shrink-0 rounded-[2rem] bg-white p-6 
+                    // ADJUSTED: Lebar card dikurangi dari w-[180px] menjadi w-[160px] 
+                    // Tinggi card dikurangi dari h-[240px] menjadi h-[220px]
+                    className="group w-[160px] sm:w-[240px] h-[220px] sm:h-[260px] flex-shrink-0 rounded-[2rem] bg-white p-3 sm:p-6 
                                flex flex-col items-center justify-center text-center transition-all duration-300 ease-in-out
                                shadow-xl hover:shadow-2xl animate-fade-in"
-                    // Stagger the animation using an inline style delay
                     style={{ animationDelay: `${i * 0.07}s` }} 
                   >
                     
@@ -232,12 +234,14 @@ function Skills() {
                     <IconRenderer item={item} />
                     
                     {/* Title */}
-                    <h3 className="text-2xl font-bold text-[#17266A] mb-1 tracking-tight">
+                    {/* ADJUSTED: Ukuran font judul dikurangi ke text-lg untuk mobile */}
+                    <h3 className="text-lg sm:text-2xl font-bold text-[#17266A] mb-1 tracking-tight">
                       {item.title}
                     </h3>
                     
-                    {/* Level - Use a muted color for contrast */}
-                    <p className="text-base font-medium text-gray-500">
+                    {/* Level */}
+                    {/* ADJUSTED: Ukuran font level dikurangi ke text-xs untuk mobile */}
+                    <p className="text-xs sm:text-base font-medium text-gray-500">
                       {item.level}
                     </p>
                     

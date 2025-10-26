@@ -17,21 +17,21 @@ function App() {
     <>
     <main>
       <Navbar />
-      <section className="min-h-screen flex items-left left">
+      <section className=" flex items-left left">
         <div className="flex items-start gap-8">
           <Hero />
         </div>
       </section>
-      <section className="min-h-screen flex items-center justify-center">
+      <section className=" flex items-center justify-center">
         <Profile />
       </section>
-      <section className="min-h-screen flex items-center justify-center">
+      <section className=" flex items-center justify-center">
         <Experience />
       </section>
-      <section className="min-h-screen flex items-center justify-center">
+      <section className=" flex items-center justify-center">
         <Skills />
       </section>
-      <section className="min-h-screen flex items-center justify-center">
+      <section className=" flex items-center justify-center">
         <Projects />
       </section>
       <Footer />

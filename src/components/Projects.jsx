@@ -1,5 +1,5 @@
-import { m } from "framer-motion";
 import React, { useRef, useEffect, useState } from "react";
+// import { m } from "framer-motion"; // m is not used, but kept for context
 
 // The project data has been updated based on your list.
 const projects = [
@@ -64,12 +64,45 @@ const SCROLL_CONTAINER_ID = 'scrollable-project-track';
 
 function Projects() {
   const scrollRef = useRef(null);
-  const [activeIndex, setActiveIndex] = useState(0); // State to track the active/centered card
+  const [activeIndex, setActiveIndex] = useState(0); 
 
   // Class names for card widths
-  const CARD_WIDTH_CLASSES = 'w-[70vw] sm:w-[50vw] md:w-[350px] lg:w-[400px]';
+  // ADJUSTED: Mengubah w-[70vw] menjadi w-[80vw] untuk memberikan ruang yang sedikit lebih besar di mobile (tapi masih scrollable)
+  const CARD_WIDTH_CLASSES = 'w-[80vw] sm:w-[50vw] md:w-[350px] lg:w-[400px]';
 
-  // Function to handle scroll and update activeIndex based on centering
+  // --- Fungsi yang Disempurnakan untuk Scroll ke Kartu Tertentu ---
+  const scrollToCard = (index) => {
+    const container = scrollRef.current;
+    if (container && index >= 0 && index < projects.length) {
+      const cardId = `project-${index}`;
+      const cardElement = container.querySelector(`#${cardId}`);
+
+      if (cardElement) {
+        cardElement.scrollIntoView({ 
+          behavior: 'smooth', 
+          inline: 'center', 
+          block: 'nearest' 
+        });
+        setActiveIndex(index); 
+      }
+    }
+  };
+
+  const handleNext = () => {
+    if (activeIndex < projects.length - 1) {
+      scrollToCard(activeIndex + 1);
+    }
+  };
+
+  const handlePrev = () => {
+    if (activeIndex > 0) {
+      scrollToCard(activeIndex - 1);
+    }
+  };
+  // ----------------------------------------
+
+
+  // Fungsi untuk menangani scroll dan memperbarui activeIndex berdasarkan pemusatan
   const handleScroll = () => {
     const container = scrollRef.current;
     if (!container) return;
@@ -77,7 +110,6 @@ function Projects() {
     const containerWidth = container.offsetWidth;
     const viewportCenter = container.scrollLeft + (containerWidth / 2);
     
-    // Select all project articles (excluding the invisible spacers)
     const cards = container.querySelectorAll('article');
     if (cards.length === 0) return;
 
@@ -85,89 +117,61 @@ function Projects() {
     let minDistance = Infinity;
     
     cards.forEach((card, index) => {
-      // Calculate the card's center position relative to the scrollable container's content start
       const cardRect = card.getBoundingClientRect();
       const containerRect = container.getBoundingClientRect();
       
       const cardCenterInScroll = container.scrollLeft + cardRect.left + (cardRect.width / 2) - containerRect.left;
       
-      // Calculate the distance between the card's center and the viewport's center
       const distanceToCenter = Math.abs(cardCenterInScroll - viewportCenter);
 
-      // Find the card closest to the center
       if (distanceToCenter < minDistance) {
         minDistance = distanceToCenter;
         newActiveIndex = index;
       }
     });
     
-    // Update active index if a new closest card is found
     if (newActiveIndex !== -1 && newActiveIndex !== activeIndex) {
       setActiveIndex(newActiveIndex);
     }
   };
 
-  // Function to handle clicking on a card: scrolls it to the center
+  // Fungsi untuk menangani klik pada kartu: scroll ke tengah
   const handleCardClick = (e, index) => {
     e.preventDefault();
-    const container = scrollRef.current;
-    if (!container) return;
-
-    // Use a unique ID structure to find the clicked card element
-    const cardId = `project-${index}`;
-    const cardElement = container.querySelector(`#${cardId}`);
-
-    if (cardElement) {
-      cardElement.scrollIntoView({ 
-        behavior: 'smooth', 
-        inline: 'center', 
-        block: 'nearest' 
-      });
-      // Immediately set the active index on click for instant visual feedback
-      setActiveIndex(index); 
-    }
+    scrollToCard(index); 
   };
 
   useEffect(() => {
-    const container = scrollRef.current;
-    if (!container) return;
+  const container = scrollRef.current;
+  if (!container) return;
 
-    // Use a small delay on scroll end to ensure the browser has finished snapping
-    let scrollTimeout;
-    const handleDebouncedScroll = () => {
-        clearTimeout(scrollTimeout);
-        scrollTimeout = setTimeout(handleScroll, 150); 
-    };
+  let scrollTimeout;
 
-    container.addEventListener('scroll', handleDebouncedScroll);
-    
-    // --- FIX: Initial Scroll to Project 1 (Index 0) ---
-    // This runs once after mount to ensure Project 1 is centered and highlighted.
-  const initialScroll = () => {
-    const cardElement = container.querySelector('#project-0');
-    if (cardElement) {
-      // Calculate card center relative to container's scrollLeft
-      const containerRect = container.getBoundingClientRect();
-      const cardRect = cardElement.getBoundingClientRect();
-      const cardCenter = cardRect.left - containerRect.left + (cardRect.width / 2);
-      const scrollTo = cardCenter - (container.offsetWidth / 2);
-      container.scrollTo({ left: scrollTo, behavior: 'smooth' });
-      setActiveIndex(0);
-    }
-  }
-    
-  // Run initial scroll slightly delayed to ensure DOM is ready and calculations are correct
-  // Use container.scrollTo instead of element.scrollIntoView to avoid triggering
-  // a vertical page scroll that makes Projects the landing view.
-  setTimeout(initialScroll, 100);
+  const handleDebouncedScroll = () => {
+    clearTimeout(scrollTimeout);
+    scrollTimeout = setTimeout(handleScroll, 150);
+  };
 
-    return () => {
-      container.removeEventListener('scroll', handleDebouncedScroll);
-      clearTimeout(scrollTimeout);
-    };
-  }, []); // Empty dependency array ensures this runs once
+  container.addEventListener("scroll", handleDebouncedScroll);
 
-  // Function to apply dynamic styles for scale and opacity
+  // ✅ FIX: Remove the line that forces scrollToCard(0)
+  // ✅ Instead, just make sure the horizontal scroll starts at left = 0
+  //    without triggering page jump.
+  requestAnimationFrame(() => {
+    container.scrollTo({
+      left: 0,
+      behavior: "instant" || "auto", // ensures it doesn't animate the whole page
+    });
+  });
+
+  return () => {
+    container.removeEventListener("scroll", handleDebouncedScroll);
+    clearTimeout(scrollTimeout);
+  };
+}, []);
+
+
+  // Fungsi untuk menerapkan style dinamis untuk scale dan opacity
   const getCardStyles = (index) => {
     const isActive = index === activeIndex;
     const scale = isActive ? 1.05 : 0.9; 
@@ -177,7 +181,6 @@ function Projects() {
       transform: `scale(${scale})`,
       opacity: opacity,
       transition: 'transform 0.3s ease-out, opacity 0.3s ease-out', 
-      // Add a slight box shadow for better highlight effect
       boxShadow: isActive ? '0 10px 25px rgba(0, 0, 0, 0.15)' : '0 1px 3px rgba(0, 0, 0, 0.05)',
     };
     
@@ -187,14 +190,14 @@ function Projects() {
 
   return (
     <section id="projects" className="mx-auto max-w-6xl py-8 md:py-20">
-      {/* Centered "Projects" title and the small separator line */}
-      <div className="text-center mb-8">
-        <h2 className="font-serif text-5xl md:text-6xl mb-12 text-indigo-900 italic font-medium tracking-tight text-left">
+      {/* Centered "Projects" title */}
+      <div className="text-left mb-8 px-4">
+        <h2 className="font-serif text-5xl md:text-6xl mb-12 text-indigo-900 italic font-medium tracking-tight">
           Projects
         </h2>
       </div>
       
-      {/* Project count indicator, always present */}
+      {/* Project count indicator */}
       <p className="text-center mb-6 text-lg">
         <span className="inline-block bg-white text-indigo-950 dark:bg-indigo-950 dark:text-white px-10 py-1 rounded-full shadow-md font-medium border border-gray-100 dark:border-gray-600">
           {activeIndex + 1} of {projects.length} projects
@@ -215,15 +218,44 @@ function Projects() {
             scrollbar-width: none;  /* Firefox */
           }
         `}</style>
+        
+        {/* --- PREVIOUS Button (Diberi warna teks default) --- */}
+        <button
+          onClick={handlePrev}
+          disabled={activeIndex === 0}
+          className={`
+            absolute left-0 top-1/2 -translate-y-1/2 z-10 p-2 rounded-full 
+            bg-white/90 shadow-xl border border-gray-100 transition-all duration-300
+            text-indigo-950 // FIX: Tambahkan warna teks default
+            hover:bg-indigo-950 hover:text-white disabled:opacity-50 disabled:cursor-not-allowed
+            hidden sm:block
+          `}
+        >
+          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 19l-7-7 7-7"></path></svg>
+        </button>
 
-        {/* Scrollable Track: Uses flex, gap, and overflow-x-scroll 
-            Added px-4 to the container for better edge visibility
-        */}
+        {/* --- NEXT Button (Diberi warna teks default) --- */}
+        <button
+          onClick={handleNext}
+          disabled={activeIndex === projects.length - 1}
+          className={`
+            absolute right-0 top-1/2 -translate-y-1/2 z-10 p-2 rounded-full 
+            bg-white/90 shadow-xl border border-gray-100 transition-all duration-300
+            text-indigo-950 // FIX: Tambahkan warna teks default
+            hover:bg-indigo-950 hover:text-white disabled:opacity-50 disabled:cursor-not-allowed
+            hidden sm:block
+          `}
+        >
+          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7"></path></svg>
+        </button>
+
+
+        {/* Scrollable Track */}
         <div
           id={SCROLL_CONTAINER_ID}
           ref={scrollRef} // Attach ref here
-          // snap-mandatory ensures the scroll snaps to the center of an item.
-          className="flex gap-6 overflow-x-scroll pb-4 pt-2 scroll-smooth snap-x snap-mandatory items-center px-4"
+          // ADJUSTED: Padding horizontal dikurangi untuk memberikan ruang lebih pada cards.
+          className="flex gap-4 overflow-x-scroll pb-4 pt-2 scroll-smooth snap-x snap-mandatory items-center px-4"
         >
         
           
@@ -231,29 +263,33 @@ function Projects() {
             <article
               key={p.id}
               id={`project-${index}`} // Unique ID for scrollIntoView
-              className={`flex-shrink-0 ${CARD_WIDTH_CLASSES} border p-6 bg-white dark:bg-[#17266A] rounded-2xl shadow-lg hover:shadow-xl snap-center cursor-pointer active:cursor-grabbing
-                ${index === 0 ? 'scroll-ml-[calc(50vw-35vw)] sm:scroll-ml-[calc(50vw-25vw)] md:scroll-ml-[calc(50vw-175px)] lg:scroll-ml-[calc(50vw-200px)]' : ''}
-                ${index === projects.length - 1 ? 'scroll-mr-[calc(50vw-35vw)] sm:scroll-mr-[calc(50vw-25vw)] md:scroll-mr-[calc(50vw-175px)] lg:scroll-mr-[calc(50vw-200px)]' : ''}
+              // Menggunakan CARD_WIDTH_CLASSES yang sudah diperbarui
+              className={`flex-shrink-0 ${CARD_WIDTH_CLASSES} border p-4 sm:p-6 bg-white dark:bg-[#17266A] rounded-2xl shadow-lg hover:shadow-xl snap-center cursor-pointer active:cursor-grabbing
+                
+                ${index === 0 ? 'scroll-ml-[calc(50vw-40vw-16px)] sm:scroll-ml-[calc(50vw-25vw-16px)] md:scroll-ml-[calc(50vw-175px-16px)] lg:scroll-ml-[calc(50vw-200px-16px)]' : ''}
+                ${index === projects.length - 1 ? 'scroll-mr-[calc(50vw-40vw-16px)] sm:scroll-mr-[calc(50vw-25vw-16px)] md:scroll-mr-[calc(50vw-175px-16px)] lg:scroll-mr-[calc(50vw-200px-16px)]' : ''}
               `}
               style={getCardStyles(index)} // Apply dynamic styles
               onClick={(e) => handleCardClick(e, index)} // Click handler
             >
               {/* Thumbnail placeholder */}
-              <div className="h-48 rounded-xl bg-gray-100 dark:bg-indigo-900 mb-4 flex items-center justify-center overflow-hidden">
-                {/* Placeholder Image is now the background of the div */}
+              {/* ADJUSTED: Mengurangi tinggi placeholder image untuk mobile (h-40) */}
+              <div className="h-40 sm:h-48 rounded-xl bg-gray-100 dark:bg-indigo-900 mb-3 sm:mb-4 flex items-center justify-center overflow-hidden">
                 <img src={p.image} alt={p.title} className="w-full h-full object-cover" />
               </div>
 
               {/* Project title + desc */}
-              <h3 className="font-semibold text-xl mb-2 text-[#17266A] dark:text-white">{p.title}</h3>
-              <p className="text-sm leading-relaxed text-[#17266A] dark:text-gray-300">{p.desc}</p>
+              <h3 className="font-semibold text-lg sm:text-xl mb-1 text-[#17266A] dark:text-white">{p.title}</h3>
+              {/* ADJUSTED: Ukuran font deskripsi dikurangi ke text-xs untuk mobile */}
+              <p className="text-xs sm:text-sm leading-relaxed text-[#17266A] dark:text-gray-300">{p.desc}</p>
 
               {/* Tags */}
-              <div className="mt-3 flex flex-wrap gap-1">
+              <div className="mt-2 flex flex-wrap gap-1">
                 {p.tags.map((t) => (
                   <span
                     key={t}
-                    className="inline-flex items-center rounded-full border border-blue-200 bg-blue-50 text-blue-900 px-2.5 py-0.5 text-xs font-medium"
+                    // ADJUSTED: Menggunakan px-2 py-0.5 text-xs (sudah kecil, tapi memastikan)
+                    className="inline-flex items-center rounded-full border border-blue-200 bg-blue-50 text-blue-900 px-2 py-0.5 text-xs font-medium"
                   >
                     {t}
                   </span>
@@ -261,25 +297,20 @@ function Projects() {
               </div>
 
               {/* CTA */}
-              <div className="mt-4">
+              <div className="mt-3">
                 <a
-                  // --- CHANGE IS HERE: Use p.url for the href ---
                   href={p.url} 
-                  // Prevent click on CTA from triggering the card click handler
                   onClick={(e) => e.stopPropagation()} 
-                  className="inline-flex items-center rounded-lg bg-[#17266A] text-white px-4 py-2 text-sm font-medium hover:bg-indigo-700 transition shadow-lg"
-                  // You might also want to add target="_blank" if these are external links
-                  // target="_blank" rel="noopener noreferrer" 
+                  // ADJUSTED: Padding dan font CTA dikurangi untuk mobile
+                  className="inline-flex items-center rounded-lg bg-[#17266A] text-white px-3 py-1.5 text-xs sm:text-sm font-medium hover:bg-indigo-900 transition shadow-lg"
                 >
-                  View Details
-                  <svg className="ml-2 h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                  View Project
+                  <svg className="ml-1 h-3 w-3 sm:h-4 sm:w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
                 </a>
               </div>
             </article>
           ))}
           
-          {/* We now use scroll-mr on the last card instead of this spacer. */}
-          {/* We keep this hidden div to fix any potential floating issues */}
           <div className="flex-shrink-0 w-0 h-1"></div>
         </div>
       </div>

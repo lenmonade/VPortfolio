@@ -24,54 +24,74 @@ function Hero() {
   }, [idx]);
 
   return (
-    <section className="mx-auto max-w-7xl px-12 md:px-24 lg:px-32 h-screen flex flex-col justify-center transform -translate-y-12">
-  {/* Name */}
-  <h1 className="font-Merriweather text-5xl md:text-6xl lg:text-7xl text-indigo-900 mb-6 leading-tight">
-    Josephine Valencia David
-  </h1>
-
-  {/* Tagline */}
-  <p className="font-serif italic text-3xl md:text-4xl lg:text-5xl mb-12 text-indigo-900 text-left">
-    {typedText}
-    <span className="inline-block w-1 bg-indigo-900 h-8 md:h-10 lg:h-12 ml-1 align-middle animate-pulse"></span>
-  </p>
-
-  {/* CTA Buttons */}
-  <div className="flex items-center gap-4">
-    <a
-      href="/CV_JVD.pdf"
-      className="inline-flex items-center rounded-full border-2 border-indigo-900 text-indigo-900 px-8 py-3 text-base font-medium hover:bg-indigo-50 transition"
+    <section 
+      id="hero" // Ditambahkan untuk navigasi yang tepat
+      // FIX: Padding horizontal dikurangi (px-6) dan min-h-screen untuk kompatibilitas
+      className="mx-auto max-w-7xl px-6 md:px-24 lg:px-32 min-h-screen flex flex-col justify-center"
     >
-      Download CV
-    </a>
+      {/* Name */}
+      <h1 
+        // FIX: Ukuran font di mobile (text-4xl) agar tidak meluber
+        className="font-Merriweather text-4xl sm:text-5xl md:text-6xl lg:text-7xl text-indigo-900 mb-4 md:mb-6 leading-tight"
+      >
+        Josephine Valencia David
+      </h1>
 
-    <a
-      href="https://linktr.ee/valenciadavid"
-      className="inline-flex items-center rounded-full border-2 border-indigo-900 text-indigo-900 px-8 py-3 text-base font-medium hover:bg-indigo-50 transition"
-    >
-      Let's Connect
-    </a>
-  </div>
+      {/* Tagline */}
+      <p 
+        // FIX: Ukuran font tagline di mobile (text-2xl)
+        className="font-serif italic text-2xl sm:text-3xl md:text-4xl lg:text-5xl mb-8 md:mb-12 text-indigo-900 text-left"
+      >
+        {typedText}
+        <span 
+          // FIX: Tinggi kursor disesuaikan (h-6)
+          className="inline-block w-1 bg-indigo-900 h-6 md:h-10 lg:h-12 ml-1 align-middle animate-pulse"
+        ></span>
+      </p>
 
-  {/* Scroll Indicator */}
-  <a
-  href="#profile"
-  className="absolute bottom-28 left-1/2 -translate-x-1/2 transform animate-bounce cursor-pointer scroll-smooth"
->
-  <svg
-    className="w-10 h-10 text-indigo-900 hover:opacity-80 transition"
-    fill="none"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-    strokeWidth="2"
-    viewBox="0 0 24 24"
-    stroke="currentColor"
-  >
-    <path d="M19 9l-7 7-7-7" />
-  </svg>
-</a>
+      {/* CTA Buttons */}
+      <div 
+        // FIX: Tombol menumpuk vertikal (flex-col) di mobile dan memanjang (w-full)
+        className="flex flex-col sm:flex-row items-center gap-4"
+      >
+        <a
+          href="/CV_JVD.pdf"
+          // FIX: Padding dan lebar tombol disesuaikan untuk mobile (px-6 py-2, w-full)
+          className="w-full sm:w-auto text-center inline-flex items-center justify-center rounded-full border-2 border-indigo-900 text-indigo-900 px-6 py-2 text-base font-medium hover:bg-indigo-50 transition"
+        >
+          Download CV
+        </a>
 
-</section>
+        <a
+          href="https://linktr.ee/valenciadavid"
+          // FIX: Padding dan lebar tombol disesuaikan untuk mobile (px-6 py-2, w-full)
+          className="w-full sm:w-auto text-center inline-flex items-center justify-center rounded-full border-2 border-indigo-900 text-indigo-900 px-6 py-2 text-base font-medium hover:bg-indigo-50 transition"
+        >
+          Let's Connect
+        </a>
+      </div>
+
+      {/* Scroll Indicator */}
+      <a
+        href="#profile"
+        // FIX: Posisi indikator dinaikkan sedikit (bottom-16)
+        className="absolute bottom-16 sm:bottom-28 left-1/2 -translate-x-1/2 transform animate-bounce cursor-pointer scroll-smooth"
+      >
+        <svg
+          // FIX: Ukuran ikon dikurangi di mobile (w-8 h-8)
+          className="w-8 h-8 md:w-10 md:h-10 text-indigo-900 hover:opacity-80 transition"
+          fill="none"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          strokeWidth="2"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
+          <path d="M19 9l-7 7-7-7" />
+        </svg>
+      </a>
+
+    </section>
   );
 }
 
