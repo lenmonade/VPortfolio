@@ -1,4 +1,4 @@
-import React, { useState } from "react"; // 1. Import useState
+import React, { useState } from "react";
 import { motion } from "framer-motion";
 
 const navItems = [
@@ -6,27 +6,22 @@ const navItems = [
   { href: "#experience", label: "Experience" },
   { href: "#skills", label: "Skills" },
   { href: "#projects", label: "Projects" },
-  // { href: "#contact", label: "Contact" },
 ];
 
-// Hamburger Icon
 const MenuIcon = (
-  <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+  <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
   </svg>
 );
 
-// Close Icon (X)
 const CloseIcon = (
-  <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+  <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
   </svg>
 );
 
-
 function Navbar() {
-  const [isMenuOpen, setIsMenuOpen] = useState(false); // 2. State for mobile menu
-
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
 
   return (
@@ -34,66 +29,55 @@ function Navbar() {
       initial={{ y: -80, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
       transition={{ duration: 0.6, ease: "easeOut" }}
-      className="sticky top-0 z-30 bg-[#FEF6F7]/90 backdrop-blur-md border-b border-gray-200"
+      className="sticky top-0 z-40 bg-[#FEF6F7]/90 backdrop-blur-md border-b border-gray-200 w-full"
     >
-      
-      {/* Container for content - Ensures correct padding on mobile/desktop */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8"> 
-        <div className="w-full flex items-center justify-between py-3 md:py-4"> 
-          {/* PERBAIKAN: Mengurangi py-4 menjadi py-3 di mobile/default untuk menghemat ruang vertikal */}
-          
-          {/* Logo */}
-          <div className="flex items-center gap-2">
-            <img 
-              src="/logo.svg" 
-              alt="Logo" 
-              className="w-8 h-8 object-contain" 
-            />
-          </div>
+      {/* Full width container */}
+      <div className="w-full flex items-center justify-between h-16 px-6 sm:px-10">
+        
+        {/* Logo */}
+        <a href="#" className="flex items-center gap-2">
+          <img src="/logo.svg" alt="Logo" className="w-8 h-8 object-contain" />
+        </a>
 
-          {/* Desktop Nav Items (Visible on md and larger) */}
-          <nav className="hidden md:flex items-center gap-8 text-[15px] font-medium">
-            {navItems.map((it) => (
-              <a
-                key={it.href}
-                href={it.href}
-                className="relative text-indigo-900 hover:text-indigo-600 transition-colors duration-300"
-              >
-                {it.label}
-              </a>
-            ))}
-          </nav>
+        {/* Desktop Menu */}
+        <nav className="hidden md:flex items-center gap-10 text-[15px] font-medium">
+          {navItems.map((it) => (
+            <a
+              key={it.href}
+              href={it.href}
+              className="text-indigo-900 hover:text-indigo-600 transition-colors duration-300"
+            >
+              {it.label}
+            </a>
+          ))}
+        </nav>
 
-          {/* Mobile Menu Button (Visible on small screens) */}
-          <button 
-            onClick={toggleMenu} 
-            className="md:hidden text-indigo-900 focus:outline-none"
-            aria-expanded={isMenuOpen}
-            aria-label="Toggle menu"
-          >
-            {isMenuOpen ? CloseIcon : MenuIcon}
-          </button>
-
-        </div>
+        {/* Mobile Menu Toggle */}
+        <button
+          onClick={toggleMenu}
+          className="md:hidden text-indigo-900 focus:outline-none"
+          aria-expanded={isMenuOpen}
+        >
+          {isMenuOpen ? CloseIcon : MenuIcon}
+        </button>
       </div>
-      
-      {/* Mobile Menu Drawer (Conditionally rendered) */}
+
+      {/* Mobile Dropdown */}
       {isMenuOpen && (
-        <motion.div 
+        <motion.div
           initial={{ opacity: 0, height: 0 }}
           animate={{ opacity: 1, height: "auto" }}
           exit={{ opacity: 0, height: 0 }}
           transition={{ duration: 0.3 }}
-          // PERBAIKAN: Menambahkan h-screen dan overflow-y-auto untuk mengatasi mode landscape
-          className="md:hidden bg-[#FEF6F7] border-t border-gray-200 h-screen overflow-y-auto absolute w-full top-[50px] sm:top-[60px]"
+          className="md:hidden bg-[#FEF6F7] border-t border-gray-200 fixed w-full top-16 h-[calc(100vh-4rem)] overflow-y-auto"
         >
-          <nav className="flex flex-col space-y-2 px-4 pb-4 pt-2">
+          <nav className="flex flex-col space-y-1 px-4 pb-4 pt-2">
             {navItems.map((it) => (
               <a
                 key={it.href}
                 href={it.href}
-                onClick={toggleMenu} // Close menu when an item is clicked
-                className="block py-2 px-3 text-base font-medium text-indigo-900 hover:bg-indigo-50 hover:text-indigo-600 rounded-md transition-colors duration-200"
+                onClick={toggleMenu}
+                className="block py-3 px-3 text-lg font-semibold text-indigo-900 hover:bg-indigo-100/50 hover:text-indigo-700 rounded-lg transition-colors duration-200"
               >
                 {it.label}
               </a>
@@ -101,7 +85,6 @@ function Navbar() {
           </nav>
         </motion.div>
       )}
-
     </motion.header>
   );
 }

@@ -9,33 +9,43 @@ import Skills from './components/Skills'
 import Projects from './components/Projects'
 import Footer from './components/Footer'
 
-
 function App() {
   const [count, setCount] = useState(0)
 
   return (
     <>
-    <main>
-      <Navbar />
-      <section className=" flex items-left left">
-        <div className="flex items-start gap-8">
+      <main className="flex flex-col items-center w-full">
+        {/* Navbar */}
+        <Navbar />
+
+        {/* Hero Section */}
+        <section className="flex justify-center items-center min-h-screen w-full">
           <Hero />
-        </div>
-      </section>
-      <section className=" flex items-center justify-center">
-        <Profile />
-      </section>
-      <section className=" flex items-center justify-center">
-        <Experience />
-      </section>
-      <section className=" flex items-center justify-center">
-        <Skills />
-      </section>
-      <section className=" flex items-center justify-center">
-        <Projects />
-      </section>
-      <Footer />
-    </main>
+        </section>
+
+        {/* Profile Section */}
+        <section className="flex justify-center items-center w-full py-16">
+          <Profile />
+        </section>
+
+        {/* Experience Section */}
+        <section className="flex justify-center items-center w-full py-16">
+          <Experience />
+        </section>
+
+        {/* Skills Section */}
+        <section className="flex justify-center items-center w-full py-16">
+          <Skills />
+        </section>
+
+        {/* Projects Section */}
+        <section className="flex justify-center items-center w-full py-16">
+          <Projects />
+        </section>
+
+        {/* Footer */}
+        <Footer />
+      </main>
     </>
   )
 }

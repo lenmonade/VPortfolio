@@ -66,9 +66,8 @@ function Projects() {
   const [activeIndex, setActiveIndex] = useState(0); 
 
   // Class names for card widths
-  // ADJUSTED: Mengubah w-[80vw] menjadi w-[90vw] untuk membuat card sedikit lebih besar di mobile, 
-  // memberikan kesan lebih 'penuh'.
-  const CARD_WIDTH_CLASSES = 'w-[90vw] sm:w-[50vw] md:w-[350px] lg:w-[400px]';
+  // FIX 1: Mengubah sm:w-[50vw] menjadi sm:w-[48vw] untuk menghindari konflik scroll-snap
+  const CARD_WIDTH_CLASSES = 'w-[90vw] sm:w-[48vw] md:w-[350px] lg:w-[400px]';
 
   // --- Fungsi yang Disempurnakan untuk Scroll ke Kartu Tertentu ---
   const scrollToCard = (index) => {
@@ -270,8 +269,9 @@ function Projects() {
               // PADDING INTERNAL KARTU: Meningkatkan padding internal dari p-4 sm:p-6 menjadi p-6 sm:p-8
               className={`flex-shrink-0 ${CARD_WIDTH_CLASSES} border p-6 sm:p-8 bg-white dark:bg-[#17266A] rounded-2xl shadow-lg hover:shadow-xl snap-center cursor-pointer active:cursor-grabbing
                 
-                ${index === 0 ? 'scroll-ml-[calc(50vw-45vw-24px)] sm:scroll-ml-[calc(50vw-25vw-24px)] md:scroll-ml-[calc(50vw-175px-24px)] lg:scroll-ml-[calc(50vw-200px-24px)]' : ''}
-                ${index === projects.length - 1 ? 'scroll-mr-[calc(50vw-45vw-24px)] sm:scroll-mr-[calc(50vw-25vw-24px)] md:scroll-mr-[calc(50vw-175px-24px)] lg:scroll-mr-[calc(50vw-200px-24px)]' : ''}
+                // FIX 2: Menyesuaikan scroll-ml/scroll-mr untuk sm:w-[48vw] (24vw center)
+                ${index === 0 ? 'scroll-ml-[calc(50vw-45vw-24px)] sm:scroll-ml-[calc(50vw-24vw-24px)] md:scroll-ml-[calc(50vw-175px-24px)] lg:scroll-ml-[calc(50vw-200px-24px)]' : ''}
+                ${index === projects.length - 1 ? 'scroll-mr-[calc(50vw-45vw-24px)] sm:scroll-mr-[calc(50vw-24vw-24px)] md:scroll-mr-[calc(50vw-175px-24px)] lg:scroll-mr-[calc(50vw-200px-24px)]' : ''}
               `}
               style={getCardStyles(index)} // Apply dynamic styles
               onClick={(e) => handleCardClick(e, index)} // Click handler
