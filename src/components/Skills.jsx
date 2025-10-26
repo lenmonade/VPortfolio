@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 // --- Mock Data ---
 const expTabs = ["Languages", "Framework & Libraries", "Tools & Platforms"];
@@ -95,16 +95,16 @@ const IconRenderer = ({ item }) => {
     const iconSrc = item.icons[0];
     
     // Determine image size based on item title
-    // ADJUSTED: Menggunakan w-16/h-16 (mobile) dan w-24/h-24 (mobile large) untuk menghemat ruang vertikal.
-    let imgSize = "w-16 h-16 sm:w-20 sm:h-20"; 
+    // Mengurangi ukuran icon sedikit di mobile agar muat lebih baik
+    let imgSize = "w-14 h-14 sm:w-18 sm:h-18"; 
     if (item.title === "HTML, CSS, JS" || item.title === "Microsoft Office") {
-      imgSize = "w-24 h-24 sm:w-28 sm:h-28";
+      imgSize = "w-20 h-20 sm:w-24 sm:h-24";
     }
 
     if (iconSrc && iconSrc.includes('/')) {
         return (
-            // ADJUSTED: Mengurangi tinggi container dari h-28 menjadi h-24 untuk mobile
-            <div className="flex justify-center items-center mb-2 h-24 w-full sm:h-28"> 
+            // Mengurangi tinggi container icon sedikit di mobile
+            <div className="flex justify-center items-center mb-1 h-20 w-full sm:h-24"> 
                 <img 
                     src={iconSrc} 
                     alt={`${item.title} icon`}
@@ -116,7 +116,7 @@ const IconRenderer = ({ item }) => {
 
     // Fallback for simple emojis
     return (
-        <div className="text-5xl mb-2 p-2 sm:text-6xl">
+        <div className="text-4xl mb-1 p-1 sm:text-5xl">
             <span className="drop-shadow-lg">{iconSrc}</span>
         </div>
     );
@@ -131,17 +131,18 @@ function Skills() {
   const contentRef = React.useRef(null);
 
   // 1. Update key on tab change to trigger fade-in animation
-  React.useEffect(() => {
+  useEffect(() => {
     setKey(prevKey => prevKey + 1);
   }, [activeTab]);
 
   // 2. Measure and set sidebar height after render/tab change
-  React.useEffect(() => {
+  useEffect(() => {
     const isDesktop = window.matchMedia("(min-width: 768px)").matches; 
 
+    // FIX: Only apply dynamic height on desktop, set to auto otherwise.
     if (contentRef.current && isDesktop) {
       setSidebarHeight(contentRef.current.offsetHeight);
-    } else if (!isDesktop) {
+    } else {
       setSidebarHeight('auto');
     }
   }, [key]); 
@@ -164,11 +165,10 @@ function Skills() {
         }
       `}</style>
 
-      {/* ADJUSTED: Padding vertikal pada section dikurangi untuk mobile (py-12) */}
+      {/* Padding vertikal pada section dikurangi untuk mobile (py-12) */}
       <section id="skills" className="mx-auto max-w-6xl px-4 py-12 md:py-24">
         
         {/* SECTION HEADER */}
-        {/* ADJUSTED: Ukuran font header dikurangi ke text-4xl dan mb-8 untuk mobile */}
         <h2 className="font-serif text-4xl md:text-6xl mb-8 md:mb-12 text-indigo-900 italic font-medium tracking-tight text-left">
           Skills
         </h2>
@@ -176,12 +176,12 @@ function Skills() {
         {/* FLEX LAYOUT */}
         <div className="flex flex-col md:flex-row">
           
-          {/* LEFT COLUMN: Sidebar Tabs */}
+          {/* LEFT COLUMN: Sidebar Tabs (Perbaikan Hover State) */}
           <div className="w-full md:w-1/3 p-0 md:pr-6 mb-6 md:mb-0">
              <div 
-               className="h-full w-full rounded-[30px] flex flex-col space-y-3 md:space-y-0 md:justify-around p-1 md:p-2" 
-               // Mengurangi space-y-4 menjadi space-y-3
-               style={{ height: sidebarHeight !== 'auto' && sidebarHeight > 0 ? `${sidebarHeight}px` : 'auto' }}
+               className="w-full rounded-[30px] flex flex-col space-y-3 md:space-y-0 md:justify-around p-1 md:p-2" 
+               // FIX: Conditionally apply height style
+               style={sidebarHeight !== 'auto' && sidebarHeight > 0 ? { height: `${sidebarHeight}px` } : {}}
              >
                 {expTabs.map((t) => {
                   const active = t === activeTab;
@@ -192,10 +192,13 @@ function Skills() {
                       className={`
                         w-full transition text-center font-semibold
                         py-3 md:py-6 px-4 text-sm md:text-lg rounded-[22px]
+                        focus:outline-none 
                         ${
                           active
-                            ? "bg-[#17266A] text-white shadow-lg"
-                            : "bg-white text-[#17266A] border-2 border-[#081956] hover:bg-gray-50"
+                            ? // Tombol AKTIF: Kunci warna background dan text, hapus border, pastikan hover juga biru gelap
+                              "bg-[#17266A] text-white shadow-lg hover:bg-[#17266A] border-transparent border-2" 
+                            : // Tombol NON-AKTIF: Terapkan border dan hover abu-abu
+                              "bg-white text-[#17266A] border-2 border-[#081956] hover:bg-gray-50"
                         }
                       `}
                     >
@@ -209,7 +212,6 @@ function Skills() {
           {/* RIGHT COLUMN: Content Container */}
           <div 
             ref={contentRef}
-            // ADJUSTED: Padding container content dikurangi dari p-4 menjadi p-3 untuk mobile
             className="w-full md:w-2/3 min-h-[300px] bg-[#1A2B53] rounded-[30px] p-3 sm:p-6 md:p-8 shadow-2xl"
           >
             
@@ -222,9 +224,9 @@ function Skills() {
                 {expData[activeTab].map((item, i) => (
                   <div
                     key={i}
-                    // ADJUSTED: Lebar card dikurangi dari w-[180px] menjadi w-[160px] 
-                    // Tinggi card dikurangi dari h-[240px] menjadi h-[220px]
-                    className="group w-[160px] sm:w-[240px] h-[220px] sm:h-[260px] flex-shrink-0 rounded-[2rem] bg-white p-3 sm:p-6 
+                    // PERBAIKAN: Mengurangi tinggi kartu di mobile dari h-[220px] menjadi h-[200px] 
+                    // dan di sm:h-[260px] menjadi sm:h-[240px] agar lebih muat di layar vertikal.
+                    className="group w-[160px] sm:w-[240px] h-[200px] sm:h-[240px] flex-shrink-0 rounded-[2rem] bg-white p-3 sm:p-6 
                                flex flex-col items-center justify-center text-center transition-all duration-300 ease-in-out
                                shadow-xl hover:shadow-2xl animate-fade-in"
                     style={{ animationDelay: `${i * 0.07}s` }} 
@@ -234,13 +236,11 @@ function Skills() {
                     <IconRenderer item={item} />
                     
                     {/* Title */}
-                    {/* ADJUSTED: Ukuran font judul dikurangi ke text-lg untuk mobile */}
                     <h3 className="text-lg sm:text-2xl font-bold text-[#17266A] mb-1 tracking-tight">
                       {item.title}
                     </h3>
                     
                     {/* Level */}
-                    {/* ADJUSTED: Ukuran font level dikurangi ke text-xs untuk mobile */}
                     <p className="text-xs sm:text-base font-medium text-gray-500">
                       {item.level}
                     </p>

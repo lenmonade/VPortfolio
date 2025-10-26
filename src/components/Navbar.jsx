@@ -39,7 +39,8 @@ function Navbar() {
       
       {/* Container for content - Ensures correct padding on mobile/desktop */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8"> 
-        <div className="w-full flex items-center justify-between py-4">
+        <div className="w-full flex items-center justify-between py-3 md:py-4"> 
+          {/* PERBAIKAN: Mengurangi py-4 menjadi py-3 di mobile/default untuk menghemat ruang vertikal */}
           
           {/* Logo */}
           <div className="flex items-center gap-2">
@@ -83,7 +84,8 @@ function Navbar() {
           animate={{ opacity: 1, height: "auto" }}
           exit={{ opacity: 0, height: 0 }}
           transition={{ duration: 0.3 }}
-          className="md:hidden bg-[#FEF6F7] border-t border-gray-200"
+          // PERBAIKAN: Menambahkan h-screen dan overflow-y-auto untuk mengatasi mode landscape
+          className="md:hidden bg-[#FEF6F7] border-t border-gray-200 h-screen overflow-y-auto absolute w-full top-[50px] sm:top-[60px]"
         >
           <nav className="flex flex-col space-y-2 px-4 pb-4 pt-2">
             {navItems.map((it) => (
