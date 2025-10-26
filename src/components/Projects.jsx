@@ -1,3 +1,4 @@
+import { m } from "framer-motion";
 import React, { useRef, useEffect, useState } from "react";
 
 // The project data has been updated based on your list.
@@ -6,50 +7,56 @@ const projects = [
     id: 1,
     title: "Portfolio Website",
     desc: "My personal portfolio website, built with React and styled using Tailwind CSS, showcasing my experience, projects, and technical skills. This project solidified my modern frontend development workflow.",
-    tags: ["React", "Tailwind CSS", "Frontend"],
-    image: "https://via.placeholder.com/400x250/FF6B6B/FFFFFF?text=Portfolio"
+    tags: ["React Native", "Tailwind CSS", "Frontend", "Node.js"],
+    image: "/Portfolio.png",
+    url: "https://valenciadavid.vercel.app/"
   },
   {
     id: 2,
-    title: "Saferime (UI/UX Prototype)",
+    title: "Saferime - UI/UX Prototype",
     desc: "A UI/UX design for a mobile prototype created for a team competition. It proposes a solution to help prevent crime through AI integration and real-time collaboration with local law enforcement.",
     tags: ["Figma", "UI/UX", "Mobile Design", "Competition"],
-    image: "https://via.placeholder.com/400x250/6BBFFF/FFFFFF?text=Saferime"
+    image: "/Saferime.png",
+    url: "https://www.figma.com/design/pB7f55JrPoRL2z99XlP3Jf/Saferime?node-id=0-1&m=dev&t=0dOpQhKoyn20ovFA-1"
   },
   {
     id: 3,
-    title: "Sortify (CNN Waste Classifier)",
+    title: "Sortify - CNN Waste Classifier",
     desc: "A web-based platform developed as a team class project, featuring a Machine Learning model (CNN with PyTorch) designed to classify waste into six categories for improved recycling accuracy.",
-    tags: ["PyTorch", "CNN", "Machine Learning", "Python"],
-    image: "https://via.placeholder.com/400x250/FFD166/FFFFFF?text=Sortify"
+    tags: ["PyTorch", "CNN", "Machine Learning", "Python", "Class Project"],
+    image: "/Sortify.png",
+    url: "https://github.com/Ud1nS/Sortify"
   },
   {
     id: 4,
-    title: "FlowerSnap (ResNet18 Classifier)",
+    title: "FlowerSnap - ResNet18 Classifier",
     desc: "A Machine Learning model built for a web-based platform (using HTML, CSS, and Python) that employs ResNet18 transfer learning to classify five types of flowers. (Team class project).",
-    tags: ["ResNet18", "Transfer Learning", "Python", "Web Platform"],
-    image: "https://via.placeholder.com/400x250/06D6A0/FFFFFF?text=FlowerSnap"
+    tags: ["ResNet18", "Transfer Learning", "Python", "Web Platform", "Class Project"],
+    image: "/Flowersnap.png"
   },
   {
     id: 5,
-    title: "Renfit (Sustainable Rental Platform)",
+    title: "Renfit - Sustainable Rental Platform (Top 10 Finalist)",
     desc: "A website designed during a team competition focused on renting outfits to reduce textile waste and provide an alternative to fast fashion. Built with HTML, CSS, and JavaScript.",
     tags: ["HTML", "CSS", "JavaScript", "Figma", "Competition"],
-    image: "https://via.placeholder.com/400x250/F8D6E3/FFFFFF?text=Renfit"
+    image: "/Renfit.png",
+    url: "https://www.figma.com/design/hR7nxnAWV2OQXVaQzCobZF/Renfit-SnapUI?node-id=0-1&m=dev&t=cLQx9doRA6f3CTlx-1"
   },
   {
     id: 6,
-    title: "Stuggy (React Native Study App)",
+    title: "Stuggy - React Native Study App",
     desc: "A feature-rich mobile study planner app (team class project) including a Pomodoro timer, priority lists, reminders, and a discussion forum, utilizing React Native and Supabase for backend services.",
-    tags: ["React Native", "Supabase", "Mobile Dev", "Expo Go"],
-    image: "https://via.placeholder.com/400x250/A3A0F5/FFFFFF?text=Stuggy"
+    tags: ["React Native", "Visual Studio Code","Figma", "GitHub","Supabase", "Mobile Dev", "Expo Go", "Class Project"], 
+    image: "/Stuggy.png",
+    url: "https://github.com/Ripupz/stuggy_app"
   },
   {
     id: 7,
-    title: "Nukaran (Used Item Exchange Prototype)",
+    title: "Nukaran - UI/UX Prototype",
     desc: "A mobile prototype created for a team competition, designed to facilitate the exchange of used items with a unique social and gamified element. Developed using Figma.",
     tags: ["Figma", "UI/UX", "Mobile Prototype", "Competition"],
-    image: "https://via.placeholder.com/400x250/80ED99/FFFFFF?text=Nukaran"
+    image: "/Nukaran.png",
+    url: "https://www.figma.com/design/4bRtCajkSmqDbsfaEnCysa/UI-UX-Fortex-SnapUI?node-id=52-2&m=dev&t=oTXIWPr3kJBA5VKX-1"
   },
 ];
 
@@ -224,9 +231,7 @@ function Projects() {
             <article
               key={p.id}
               id={`project-${index}`} // Unique ID for scrollIntoView
-              // Fixed card width. snap-center ensures it snaps to the middle of the container
-              // Added scroll-mx-[--center-margin] to the first and last cards to center them
-              className={`flex-shrink-0 ${CARD_WIDTH_CLASSES} border p-6 bg-white dark:bg-gray-800 rounded-2xl shadow-lg hover:shadow-xl snap-center cursor-pointer active:cursor-grabbing
+              className={`flex-shrink-0 ${CARD_WIDTH_CLASSES} border p-6 bg-white dark:bg-[#17266A] rounded-2xl shadow-lg hover:shadow-xl snap-center cursor-pointer active:cursor-grabbing
                 ${index === 0 ? 'scroll-ml-[calc(50vw-35vw)] sm:scroll-ml-[calc(50vw-25vw)] md:scroll-ml-[calc(50vw-175px)] lg:scroll-ml-[calc(50vw-200px)]' : ''}
                 ${index === projects.length - 1 ? 'scroll-mr-[calc(50vw-35vw)] sm:scroll-mr-[calc(50vw-25vw)] md:scroll-mr-[calc(50vw-175px)] lg:scroll-mr-[calc(50vw-200px)]' : ''}
               `}
@@ -234,21 +239,21 @@ function Projects() {
               onClick={(e) => handleCardClick(e, index)} // Click handler
             >
               {/* Thumbnail placeholder */}
-              <div className="h-48 rounded-xl bg-gray-100 dark:bg-gray-700 mb-4 flex items-center justify-center overflow-hidden">
+              <div className="h-48 rounded-xl bg-gray-100 dark:bg-indigo-900 mb-4 flex items-center justify-center overflow-hidden">
                 {/* Placeholder Image is now the background of the div */}
                 <img src={p.image} alt={p.title} className="w-full h-full object-cover" />
               </div>
 
               {/* Project title + desc */}
-              <h3 className="font-semibold text-xl mb-2 text-gray-900 dark:text-white">{p.title}</h3>
-              <p className="text-sm leading-relaxed text-gray-600 dark:text-gray-300">{p.desc}</p>
+              <h3 className="font-semibold text-xl mb-2 text-[#17266A] dark:text-white">{p.title}</h3>
+              <p className="text-sm leading-relaxed text-[#17266A] dark:text-gray-300">{p.desc}</p>
 
               {/* Tags */}
               <div className="mt-3 flex flex-wrap gap-1">
                 {p.tags.map((t) => (
                   <span
                     key={t}
-                    className="inline-flex items-center rounded-full border border-blue-200 bg-blue-50 text-blue-700 px-2.5 py-0.5 text-xs font-medium"
+                    className="inline-flex items-center rounded-full border border-blue-200 bg-blue-50 text-blue-900 px-2.5 py-0.5 text-xs font-medium"
                   >
                     {t}
                   </span>
@@ -258,10 +263,13 @@ function Projects() {
               {/* CTA */}
               <div className="mt-4">
                 <a
-                  href="#"
+                  // --- CHANGE IS HERE: Use p.url for the href ---
+                  href={p.url} 
                   // Prevent click on CTA from triggering the card click handler
                   onClick={(e) => e.stopPropagation()} 
-                  className="inline-flex items-center rounded-lg bg-indigo-600 text-white px-4 py-2 text-sm font-medium hover:bg-indigo-700 transition shadow-lg"
+                  className="inline-flex items-center rounded-lg bg-[#17266A] text-white px-4 py-2 text-sm font-medium hover:bg-indigo-700 transition shadow-lg"
+                  // You might also want to add target="_blank" if these are external links
+                  // target="_blank" rel="noopener noreferrer" 
                 >
                   View Details
                   <svg className="ml-2 h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>

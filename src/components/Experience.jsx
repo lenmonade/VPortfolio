@@ -53,6 +53,12 @@ const experiences = [
     description: "As the Coordinator of the Art & Design Division, I was responsible for leading and managing the division and contributing with team members to the design of publication media, PowerPoints, certificates, and other materials.",
     tags: ["Leadership", "Creativity", "Team Management"],
     image: '/BTV.jpg',
+  },
+  {
+    // New item for LinkedIn
+    title: "More on my LinkedIn profile!",
+    link: "https://www.linkedin.com/in/josephine-valencia-david",
+    tags: []
   }
 ];
 
@@ -60,6 +66,9 @@ const experiences = [
 const TimelineItem = ({ exp, index, activeIndex, activeDotColor, activeTextColor, inactiveTextColor, accentColor }) => {
   const isActive = activeIndex === index;
   
+  // Check if it's the LinkedIn item
+  const isLinkItem = !!exp.link; 
+
   return (
     <div 
       key={index} 
@@ -81,42 +90,67 @@ const TimelineItem = ({ exp, index, activeIndex, activeDotColor, activeTextColor
       <div 
         className={`flex items-start gap-3 text-left mb-3 transition-all duration-300 ${isActive ? 'opacity-100' : 'opacity-70'}`}
       >
-        {/* Icon container */}
-        <div className={`flex-shrink-0 mt-0.5 transition-colors duration-300 ${accentColor}`}>
-          {exp.icon}
-        </div>
+        {/* Icon container - Only show if exp.icon exists */}
+        {exp.icon && (
+          <div className={`flex-shrink-0 mt-0.5 transition-colors duration-300 ${accentColor}`}>
+            {exp.icon}
+          </div>
+        )}
         
-        {/* Title */}
+        {/* Title / Link */}
         <h3 className={`text-xl md:text-2xl font-bold ${isActive ? activeTextColor : inactiveTextColor}`}>
-          {exp.title}
+          {isLinkItem ? (
+            // Render the title with the word "LinkedIn" as a clickable link
+            <>
+              More on my&nbsp;
+              <a 
+                href={exp.link} 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                className={`underline transition-colors duration-300 ${isActive ? 'text-indigo-900 hover:text-indigo-700' : 'text-indigo-700 hover:text-indigo-500'}`}
+              >
+                LinkedIn
+              </a>
+              &nbsp;profile!
+            </>
+          ) : (
+            // Render the regular title
+            exp.title
+          )}
         </h3>
       </div>
       
-      {/* Date */}
-      <p className={`mb-4 text-base text-left ${inactiveTextColor}`}>{exp.date}</p>
+      {/* Date - Only show if date exists */}
+      {!isLinkItem && exp.date && (
+        <p className={`mb-4 text-base text-left ${inactiveTextColor}`}>{exp.date}</p>
+      )}
       
-      {/* Description - Explicitly set to text-left */}
-      <p className={`mb-5 leading-relaxed text-base max-w-full text-left transition-all duration-300 ${
-        isActive ? activeTextColor : inactiveTextColor
-      }`}>
-        {exp.description}
-      </p>
+      {/* Description - Only show if description exists */}
+      {!isLinkItem && exp.description && (
+        <p className={`mb-5 leading-relaxed text-base max-w-full text-left transition-all duration-300 ${
+          isActive ? activeTextColor : inactiveTextColor
+        }`}>
+          {exp.description}
+        </p>
+      )}
       
-      {/* Tags */}
-      <div className="flex flex-wrap gap-2">
-        {exp.tags.map((tag, tagIndex) => (
-          <span
-            key={tagIndex}
-            className={`px-4 py-2 rounded-full text-xs font-semibold shadow-md transition-all duration-300 
-              ${isActive 
-                ? 'bg-indigo-900 text-white' // Dark accent for active tag
-                : 'bg-white text-indigo-700 opacity-90 hover:opacity-100' // Fixed: Used bg-white for clean inactive look
-              }`}
-          >
-            {tag}
-          </span>
-        ))}
-      </div>
+      {/* Tags - Only show if tags exist and it's not the link item */}
+      {!isLinkItem && exp.tags && exp.tags.length > 0 && (
+        <div className="flex flex-wrap gap-2">
+          {exp.tags.map((tag, tagIndex) => (
+            <span
+              key={tagIndex}
+              className={`px-4 py-2 rounded-full text-xs font-semibold shadow-md transition-all duration-300 
+                ${isActive 
+                  ? 'bg-indigo-900 text-white' // Dark accent for active tag
+                  : 'bg-white text-indigo-700 opacity-90 hover:opacity-100' // Fixed: Used bg-white for clean inactive look
+                }`}
+            >
+              {tag}
+            </span>
+          ))}
+        </div>
+      )}
     </div>
   );
 };
@@ -158,8 +192,6 @@ const ExperienceTimeline = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  // Removed: scrollToExperience function is no longer needed since dots are decorative
-
   return (
     <div className="min-h-screen font-sans"> 
       <section id="experience" className="mx-auto max-w-7xl px-4 py-16 md:py-24">
@@ -194,7 +226,6 @@ const ExperienceTimeline = () => {
                     exp={exp}
                     index={index}
                     activeIndex={activeIndex}
-                    // scrollToExperience removed
                     activeDotColor={activeDotColor}
                     activeTextColor={activeTextColor}
                     inactiveTextColor={inactiveTextColor}
@@ -212,9 +243,10 @@ const ExperienceTimeline = () => {
                 {/* A placeholder div to ensure vertical alignment */}
                 <div className="h-0 w-0"></div> 
                 
-                {/* Image Card */}
-                <div className="overflow-hidden rounded-xl shadow-2xl bg-white transition-opacity duration-500"
-                     style={{ opacity: activeIndex === index ? 1 : 0.2 }}
+                {/* Image Card - Hide image if it's the link item and image is not specified */}
+                <div 
+                  className={`overflow-hidden rounded-xl shadow-2xl bg-white transition-opacity duration-500 ${!exp.image ? 'hidden' : ''}`}
+                  style={{ opacity: activeIndex === index ? 1 : 0.2 }}
                 >
                   <img 
                     src={exp.image} 
