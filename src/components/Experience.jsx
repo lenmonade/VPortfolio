@@ -23,6 +23,14 @@ const CompetitionIcon = (
 // --- Data Structure ---
 const experiences = [
   {
+    // icon: OrganizationIcon, 
+    title: "UI/UX Designer Intern - Kodekiddo & Klaskoo",
+    date: "February 2026 - Present",
+    description: "Designed features for the Klaskoo mobile app (school and daycare management) and created interactive user experiences for KodeKiddo platforms.",
+    tags: ["UI/UX","Creativity", "Team Management"],
+    image: '/Kodekiddo.JPG',
+  },
+  {
     // icon: OrganizationIcon,
     title: "Chairman - HISHOT (Himti Seminar Workshop and Study Tour) 2025",
     date: "May 2025 — Present",
@@ -45,14 +53,6 @@ const experiences = [
     description: "Competed as part of team SnapUI in IFEST UNPAD’s Web Development competition, presenting Renfit, a website for clothing rental services, and made it to the top 10 finalist — marking significant progress from our first competition together.",
     tags: ["Creativity", "Innovation", "Teamwork"],
     image: '/IFEST.jpeg',
-  },
-  {
-    // icon: OrganizationIcon, 
-    title: "Coordinator of Art & Design Division- Pengabdian Kepada Masyarakat 2024 - BINUS TV Club",
-    date: "April 2024 - July 2024",
-    description: "As the Coordinator of the Art & Design Division, I was responsible for leading and managing the division and contributing with team members to the design of publication media, PowerPoints, certificates, and other materials.",
-    tags: ["Leadership", "Creativity", "Team Management"],
-    image: '/BTV.jpg',
   },
   {
     // New item for LinkedIn
