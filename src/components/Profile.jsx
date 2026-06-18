@@ -68,8 +68,8 @@ function Profile() {
                   <br />
                   A third-year Computer Science student at{" "}
                   <span className="font-semibold">Binus University</span>.<br />
-                  Currently taking streaming –{" "}
-                  <span className="font-semibold">Intelligence Systems</span>.
+                  Currently in an Internship program{" "}
+                  <span className="font-semibold">as UI/UX Designer</span>.
                   <br />
                   <br />
                 </p>
